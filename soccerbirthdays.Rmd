@@ -35,11 +35,10 @@ birthdaydata %>%
   summarize(total = n()) %>% 
   
   
-  ggplot(mapping = aes(x = month, y = total))+
+  ggplot(mapping = aes(x = fct_rev(month), y = total))+
   geom_col(fill = "darkseagreen3")+
   labs(title = "Soccer Birthmonths for Euro 2020 squads", subtitle = "People born after July may be secretly plotting schemes to reduce competition. \nIt 'may' not be a good time to be old after all.", x = "Birth Month", y = "Amount of People Born Each Month", caption = "Source: Wikipedia")+
-  coord_flip() +
-  y_scale_reverse()
+  coord_flip() 
 
 options(warn = oldw)
 
