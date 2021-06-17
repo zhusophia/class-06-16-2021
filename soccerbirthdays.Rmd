@@ -1,0 +1,49 @@
+---
+title: <b> Soccer Birthdays </b>
+subtitle: "Will YOU be having a chat with your parents tonight?"
+date: "2021-06-16"
+author: "Sophia Zhu"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(rvest)
+oldw <- getOption("warn")
+options(warn = -1)
+```
+
+```{r, echo = FALSE}
+# birthdaydata %>% 
+#   mutate(birthdate = str_sub(value, 7,8)) %>% 
+#   mutate(birthdate = as.double(birthdate)) %>% 
+#   select(birthdate) %>% 
+#   ggplot(aes(birthdate))+
+#   geom_histogram(bins = 12, color = "white")+
+#   scale_x_continuous(breaks = 1:12)+
+#   theme_dark()+
+#   labs(title = "Soccer Birthmonths for Euro 2020 squads", subtitle = "are older people just better?", x = "Birth Month", y = "Amount of People")
+
+birthdaydata <- read_csv("birthdates.csv", col_types = cols(value = col_character()))
+
+birthdaydata %>% 
+  mutate(date = parse_date(str_sub(value, 2, 11))) %>% 
+  mutate(raw_month = months(date)) %>% 
+  mutate(month = parse_factor(raw_month, levels = month.name)) %>% 
+  group_by(month) %>% 
+  summarize(total = n()) %>% 
+  
+  
+  ggplot(mapping = aes(x = month, y = total))+
+  geom_col(fill = "darkseagreen3")+
+  labs(title = "Soccer Birthmonths for Euro 2020 squads", subtitle = "People born after July may be secretly plotting schemes to reduce competition. \nIt 'may' not be a good time to be old after all.", x = "Birth Month", y = "Amount of People Born Each Month", caption = "Source: Wikipedia")+
+  coord_flip() +
+  y_scale_reverse()
+
+options(warn = oldw)
+
+```
+
+
+
